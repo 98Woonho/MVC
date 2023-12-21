@@ -26,8 +26,6 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-
     @GetMapping("/myinfo")
     public void user(Authentication authentication , Model model){
         log.info("GET /user/myinfo...Authentication : " + authentication);
@@ -40,8 +38,6 @@ public class UserController {
         model.addAttribute("authentication",authentication);
 
     }
-
-
 
     @GetMapping("/join")
     public void getJoin(){
