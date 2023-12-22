@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- th:fragment     -->
+    <th:block th:insert="~{fragments/head :: headCdns}"/>
+
+    <!-- common.css    -->
+    <link rel="stylesheet" href="/css/common.css">
+
+    <!-- join.css    -->
+    <link rel="stylesheet" href="/css/user/join.css">
+
+</head>
+<body>
+
+
+<div class="wrapper ">
+
+    <header>
+
+    </header>
+
+    <main class="container-xxl">
+        <section>
+            <div class="join_block">
+                <div class="header">
+                    <!-- title -->
+                    <h3>회원가입</h3>
+                </div>
+                <div class="body">
+                    <form  class="joinform"  name="joinform" action="/user/join" method="post" onsubmit="return false">
+                        <div class="mt-2 mb-2">
+                            <label>이메일계정</label>&nbsp;&nbsp;<span th:text="${username}" style="font-size:0.7rem;color:orange;" class="username_msg"></span>
+                            <div style="display:flex;">
+                                <input name="username" class="form-control username" placeholder="이메일 계정 입력">
+
+                                <!-- button 태그 속성 설명
+                                type="button" : 버튼의 타입을 지정합니다 (여기서는 일반 버튼으로 지정되어 있습니다. submit 버튼이 아님)
+                                class="btn btn-secondary email_auth_btn" : 스타일링을 위한 하나 이상의 클래스 이름을 지정합니다 (이 경우 Bootstrap 클래스를 사용하고 있습니다)
+                                data-bs-toggle="modal" : 버튼 클릭을 처리할 Bootstrap JavaScript 컴포넌트를 지정합니다 (여기서는 모달을 지정하고 있습니다)
+                                data-bs-target="#exampleModal" : 버튼 클릭 시 나타날 모달을 지정합니다 (ID가 "exampleModal"으로 식별됩니다)
+                                style="width:80px;margin-left:5px;" : 버튼에 대한 인라인 CSS 스타일을 지정합니다. 너비와 왼쪽 여백을 설정하고 있습니다
+                                -->
+                                <button type="button" onclick="emailAuthFunc()" class="btn btn-secondary email_auth_btn" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width:80px;margin-left:5px;">
+                                    인증
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label>패스워드</label>&nbsp;&nbsp;<span th:text="${password}"  style="font-size:0.7rem;color:orange;"></span>
+                            <input type="password" name="password" class="form-control" placeholder="패스워드 입력">
+                        </div>
+                        <div class="mb-2">
+                            <label>패스워드 확인</label>&nbsp;&nbsp;<span th:text="${repassword}"  style="font-size:0.7rem;color:orange;"></span>
+                            <input type="password" name="repassword" class="form-control" placeholder="패스워드 다시입력">
+                        </div>
+                        <div class="mb-2">
+                            <label>연락처</label>  <span th:text="${phone}"  style="font-size:0.7rem;color:orange;"></span>
+                            <div>
+                                <input name="phone" class="form-control" placeholder="- 제외하고 입력">
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label>우편번호 검색</label>
+                            <div style="display:flex;">
+                                <input name="zipcode" class="form-control zipcode"  placeholder="우편번호 입력">
+                                <button class="btn btn-secondary search_addr_btn" style="width:80px;margin-left:5px;">검색</button>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label>기본 주소</label>
+                            <input name="addr1" class="form-control addr1"  placeholder="기본주소 입력">
+                        </div>
+                        <div class="mb-2">
+                            <label>상세 주소</label>
+                            <input name="addr2" class="form-control" placeholder="상세주소 입력">
+                        </div>
+                        <div class="mb-2">
+                            <button onclick=isValid() class="btn btn-success w-100 join_btn">회원가입</button>
+                        </div>
+                        <div class="mb-2">
+                            <button  class="btn btn-secondary w-100">이전으로</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <script>
+                const isValid = () => {
+                    // 유효성 체크 username, password, phone...
+                    const joinform = document.joinform;
+                    const exampleModal = document.getElementById('exampleModal');
+
+                    let regexUsername = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+                    if(joinform.username.value.trim() === "") {
+                        alert("이메일을 입력하세요.");
+                        return false;
+                    } else if(!regexUsername.test(joinform.username.value.trim())) {
+                        alert("올바른 이메일을 입력하세요.");
+                        return false;
+                    }
+                    exampleModal.removeAttribute('hidden');
+                    return true;
+                };
+
+                const emailAuthFunc = () => {
+                    if(isValid()) {
+                        // 서버 이메일 전송 요청 GET - 비동기요청
+                        const email = document.joinform.username.value;
+
+                        /**
+                         * 이렇게 하면 Controller의 @GetMapping에서
+                         * @GetMapping("/sendmail/{email}")
+                         * public void getSendmail(@PathVariable String email) 이런 식으로 적으면
+                         * axios.get에서 받은 email을 사용 가능
+                         */
+                        axios.get('/user/sendmail/' + email)
+                            .then(res=>{})
+                            .catch(err=>{});
+                    } else {
+                        location.href="/user/join";
+                    }
+                }
+            </script>
+        </section>
+
+    </main>
+
+
+</div>
+
+
+
+
+
+<!-- Email Auth Modal -->
+<div hidden class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">인증 코드 입력</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form style="display:flex;justify-content:space-between;" onSubmit="return false">
+                    <div style="width:100%;">
+                        <input class="form-control code">
+                    </div>
+                    <div style="width:80px;margin-left:5px;text-align:right;">
+                        <button class="btn btn-primary email_auth_btn_2">전송</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">다시요청</button>
+                <button type="button" class="btn btn-secondary modal_exit" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- axios -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- common.js   -->
+<script src="/js/common.js"></script>
+<!-- common.js   -->
+<script src="/js/user/join.js"></script>
+
+
+
+</body>
+</html>
