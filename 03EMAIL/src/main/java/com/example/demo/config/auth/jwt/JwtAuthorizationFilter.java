@@ -78,7 +78,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
         }catch(Exception e){
             System.out.println("[JWTAUTHORIZATIONFILTER] impoartAuth null Exception...message : " + e.getMessage());
-            response.sendRedirect("/login?error=" + URLEncoder.encode(e.getMessage(),"UTF-8"));
+            response.sendRedirect("/login?error=" + URLEncoder.encode(e.getMessage(),"UTF-8")); // /user/join으로 접근 시, 본인 인증을 했다는 쿠키가 없으면 /login 페이지로 돌아감.
             return ;
         }
 

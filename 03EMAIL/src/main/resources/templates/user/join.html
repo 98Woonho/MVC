@@ -171,12 +171,19 @@
             alert("이메일 형식으로 입력해주세요");
             return false;
         }
+        exampleModal.removeAttribute('hidden');
         return true;
     };
     const emailAuthFunc = function (){
         if (isValid()){
             //서버 이메일 전송 요청 GET - 비동기 요청
             const email = document.joinform.username.value;
+            /**
+             * 이렇게 하면 Controller의 @GetMapping에서
+             * @GetMapping("/sendmail/{email}")
+             * public void getSendmail(@PathVariable String email) 이런 식으로 적으면
+             * axios.get에서 받은 email을 사용 가능
+             */
             axios.get('/user/sendMail/' + email)
                 .then(res=>{
                     console.log(res);
@@ -199,7 +206,7 @@
         const emailForm = document.emailForm;
         const emailCode = emailForm.emailCode.value;
 
-        if(emailCode.trim()==''){
+        if(emailCode.trim()===''){
             alert('인증코드를 올바르게 입력하세요');
             return ;
         }
