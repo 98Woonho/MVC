@@ -59,8 +59,9 @@ public class SecurityConfig  {
         http.authorizeHttpRequests(
                 authorize->{
                     authorize.requestMatchers("/js/**","/css/**","/images/**","/templates").permitAll();
-                    authorize.requestMatchers("/","/login", "/user/**").permitAll();
+                    authorize.requestMatchers("/","/login","/user/**").permitAll();
                     authorize.requestMatchers("/join").hasRole("ANONYMOUS");
+
                     authorize.anyRequest().authenticated();
                 }
         );
