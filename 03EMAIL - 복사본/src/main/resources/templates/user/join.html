@@ -67,7 +67,7 @@
                                 <label>우편번호 검색</label>
                                 <div style="display:flex;">
                                     <input name="zipcode" class="form-control zipcode"  placeholder="우편번호 입력">
-                                    <button class="btn btn-secondary search_addr_btn" style="width:80px;margin-left:5px;">검색</button>
+                                    <a href="javascript:openAddrPopUp()"  class="btn btn-secondary search_addr_btn" style="width:80px;margin-left:5px;">검색</a>
                                 </div>
                             </div>
                             <div class="mb-2">
@@ -158,88 +158,7 @@
 
 
 
-    <script>
-     const isValid=() => {
-        //유효성 체크 username, password, phone..
 
-        const joinform = document.joinform;
-        let regexUsername = new RegExp("[a-z0-9]+@[a-z]+\\.[a-z]{2,3}")
-        if(joinform.username.value.trim()===""){
-            alert("email주소를 입력하세요");
-            return false;
-        }else if(!regexUsername.test(joinform.username.value.trim())){
-            alert("이메일 형식으로 입력해주세요");
-            return false;
-        }
-        exampleModal.removeAttribute('hidden');
-        return true;
-    };
-    const emailAuthFunc = function (){
-        if (isValid()){
-            //서버 이메일 전송 요청 GET - 비동기 요청
-            const email = document.joinform.username.value;
-            /**
-             * 이렇게 하면 Controller의 @GetMapping에서
-             * @GetMapping("/sendmail/{email}")
-             * public void getSendmail(@PathVariable String email) 이런 식으로 적으면
-             * axios.get에서 받은 email을 사용 가능
-             */
-            axios.get('/user/sendMail/' + email)
-                .then(res=>{
-                    console.log(res);
-                })
-                .catch(err=>{
-                    console.log(err);
-                });
-        }
-        else
-        {
-            location.href="/user/join";
-        }
-
-    }
-
-     //이메일 인증버튼 클릭 이벤트
-     const email_btn_el = document.querySelector('.email_auth_btn_2');
-     email_btn_el.addEventListener('click',function(){
-        console.log("TEST");
-        const emailForm = document.emailForm;
-        const emailCode = emailForm.emailCode.value;
-
-        if(emailCode.trim()===''){
-            alert('인증코드를 올바르게 입력하세요');
-            return ;
-        }
-//       emailForm.submit();
-
-
-
-
-       axios.get('/user/emailConfirm?emailCode='+emailCode)
-       .then(res =>{
-            console.log(res);
-            if(res.data.success){
-                    //인증완료 -> 다음 입력을 할 준비~
-                    document.querySelector('.username_msg').style.color='green';
-            }else{
-                    //인증X -> 인증이 안된 내용을 표시
-                    document.querySelector('.username_msg').style.color='orange';
-            }
-            document.querySelector('.username_msg').innerHTML=res.data.message;
-            // 모달창 비활성화..
-            document.querySelector('#exampleModal').classList.remove('show');
-            document.querySelector('#exampleModal').classList.add('hide');
-            document.querySelector('.modal-backdrop').remove();
-
-
-       })
-       .catch(err=>{console.log(err);});
-
-
-     })
-
-
-    </script>
     <!-- axios -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -249,6 +168,98 @@
     <script src="/js/user/join.js"></script>
 
 
+    <script>
+        const isValid=() => {
+           //유효성 체크 username, password, phone..
+
+           const joinform = document.joinform;
+           let regexUsername = new RegExp("[a-z0-9]+@[a-z]+\\.[a-z]{2,3}")
+           if(joinform.username.value.trim()===""){
+               alert("email주소를 입력하세요");
+               return false;
+           }else if(!regexUsername.test(joinform.username.value.trim())){
+               alert("이메일 형식으로 입력해주세요");
+               return false;
+           }
+           return true;
+       };
+       const emailAuthFunc = function (){
+           if (isValid()){
+               //서버 이메일 전송 요청 GET - 비동기 요청
+               const email = document.joinform.username.value;
+               axios.get('/user/sendMail/' + email)
+                   .then(res=>{
+                       console.log(res);
+                   })
+                   .catch(err=>{
+                       console.log(err);
+                   });
+           }
+           else
+           {
+               location.href="/user/join";
+           }
+
+       }
+
+        //이메일 인증버튼 클릭 이벤트
+        const email_btn_el = document.querySelector('.email_auth_btn_2');
+        email_btn_el.addEventListener('click',function(){
+           console.log("TEST");
+           const emailForm = document.emailForm;
+           const emailCode = emailForm.emailCode.value;
+
+           if(emailCode.trim()==''){
+               alert('인증코드를 올바르게 입력하세요');
+               return ;
+           }
+   //       emailForm.submit();
+
+
+
+
+          axios.get('/user/emailConfirm?emailCode='+emailCode)
+          .then(res =>{
+               console.log(res);
+               if(res.data.success){
+                       //인증완료 -> 다음 입력을 할 준비~
+                       document.querySelector('.username_msg').style.color='green';
+               }else{
+                       //인증X -> 인증이 안된 내용을 표시
+                       document.querySelector('.username_msg').style.color='orange';
+               }
+               document.querySelector('.username_msg').innerHTML=res.data.message;
+               // 모달창 비활성화..
+               document.querySelector('#exampleModal').classList.remove('show');
+               document.querySelector('#exampleModal').classList.add('hide');
+               document.querySelector('.modal-backdrop').remove();
+
+
+          })
+          .catch(err=>{console.log(err);});
+
+
+        })
+
+
+    </script>
+
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        const openAddrPopUp = ()=>{
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    console.log(data);
+                    if(data.addressType=='R'){
+                        document.joinform.addr1.value=data.roadAddress; //도로명 주소
+                    }else{
+                        document.joinform.addr1.value=data.jibunAddress; //지번주소
+                    }
+                    document.joinform.zipcode.value=data.zonecode;
+                }
+            }).open();
+        }
+    </script>
 
 </body>
 </html>

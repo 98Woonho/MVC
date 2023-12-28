@@ -134,7 +134,7 @@ public class UserController {
         //쿠키로 본인인증 완료값을 전달!
         Cookie authCookie = new Cookie("importAuth","true");
         authCookie.setMaxAge(60*30); //30분동안 유지
-        authCookie.setPath("/"); // 쿠키가 적용되는 url
+        authCookie.setPath("/");
         response.addCookie(authCookie);
 
         JSONObject obj = new JSONObject();
