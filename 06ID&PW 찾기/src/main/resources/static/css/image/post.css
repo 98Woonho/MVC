@@ -1,0 +1,25 @@
+.imageBlock {
+    width: 800px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.imageBlock > * {
+    margin: 50px;
+    border: 1px solid gray;
+}
+
+.imageBlock > .left {
+    width: 400px;
+    height: 400px;
+}
+
+.imageBlock > .right {
+
+}
+
+.imageBlock > .right > input {
+
+}

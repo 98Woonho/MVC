@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <th:block th:insert="~{fragments/head :: headCdns}"   />
+
+    <!-- Common css   -->
+    <link href="/css/common.css"  rel="stylesheet">
+    <link href="/css/image/post.css"  rel="stylesheet">
+</head>
+<body>
+
+<div class="wrapper">
+    <header>
+        <div class="top-header">
+            <span class="material-symbols-outlined">home</span>
+        </div>
+
+        <nav>
+
+        </nav>
+
+    </header>
+    <main>
+        <section>
+            <div class="imageBlock">
+                <div class="left">
+
+                </div>
+                <div class="right">
+                    <form>
+                        <input type="text">
+                        <input type="text">
+                        <input type="text">
+                        <input type="text">
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+    </footer>
+</div>
+
+
+
+<!-- Axios JS   -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js" integrity="sha512-b94Z6431JyXY14iSXwgzeZurHHRNkLt9d6bAHt7BZT38eqV+GyngIi/tVye4jBKPYQ2lBdRs0glww4fmpuLRwA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- JS  -->
+<script src="js/common.js"></script>
+
+<script>
+    const leftEl = document.querySelector('.imageBlock > .left');
+    leftEl.addEventListener('dragEnter', function (e) {
+        e.preventDefault()
+        console.log('dragEnter');
+    });
+    leftEl.addEventListener('dragOver', function(e) {
+        e.preventDefault()
+        console.log('dragOver');
+    });
+    leftEl.addEventListener('dragLeave', function(e) {
+        e.preventDefault()
+        console.log('dragLeave');
+    });
+    leftEl.addEventListener('drop', function(e) {
+        e.preventDefault()
+        console.log('drop', e);
+        console.log('drop', e.dataTransfer.files[0]); // drop한 파일의 정보
+    });
+</script>
+
+</body>
+</html>
