@@ -113,11 +113,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                   <form name="emailForm"  action="/user/emailConfirm" style="display:flex;justify-content:space-between;" onSubmit="return false">
-                       <div style="width:100%;">
-                           <input name="emailCode" class="form-control code">
+                   <form id="emailForm"  action="/user/emailConfirm" style="display:flex;justify-content:space-between;" onSubmit="return false">
+                       <label style="width:100%;">
+                           <input type="text" name="emailCode" class="form-control code">
                            <input type="hidden" name="username" />
-                       </div>
+                       </label>
                        <div style="width:80px;margin-left:5px;text-align:right;">
                            <button class="btn btn-primary email_auth_btn_2">전송</button>
                        </div>
@@ -164,6 +164,12 @@
            if (isValid()){
                //서버 이메일 전송 요청 GET - 비동기 요청
                const email = document.joinform.username.value;
+               /**
+                * 이렇게 하면 Controller의 @GetMapping에서
+                * @GetMapping("/sendmail/{email}")
+                * public void getSendmail(@PathVariable String email) 이런 식으로 적으면
+                * axios.get에서 받은 email을 사용 가능
+                */
                axios.get('/user/sendMail/' + email)
                    .then(res=>{
                        console.log(res);
@@ -183,15 +189,14 @@
         const email_btn_el = document.querySelector('.email_auth_btn_2');
         email_btn_el.addEventListener('click',function(){
            console.log("TEST");
-           const emailForm = document.emailForm;
-           const emailCode = emailForm.emailCode.value;
+           const emailForm = document.getElementById('emailForm');
            const username = document.joinform.username.value;
            console.log(username);
            emailForm.username.value = username;
-           if(emailCode.trim()==''){
-               alert('인증코드를 올바르게 입력하세요');
-               return ;
-           }
+            if(emailForm['emailCode'].value === ''){
+                alert('인증코드를 올바르게 입력하세요');
+                return ;
+            }
    //       emailForm.submit();
 
 

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class UserDto {
     @NotBlank(message="username을 입력하세요")
     private String username;
-    @NotBlank(message="password 입력하세요")
+    @NotBlank(message="password를 입력하세요")
     @Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{8,16}$",message="'숫자','문자','특수문자' 무조건 1개 이상, 비밀번호 '최소 8자에서 최대 16자'까지 허용됩니다" )
     private String password;
 
@@ -28,7 +28,7 @@ public class UserDto {
     @NotBlank(message="nickname은 반드시 입력해야합니다.")
     private String nickname;
 
-    @NotBlank(message="repassword 입력하세요")
+    @NotBlank(message="repassword를 입력하세요")
     @Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{8,16}$",message="'숫자','문자','특수문자' 무조건 1개 이상, 비밀번호 '최소 8자에서 최대 16자'까지 허용됩니다" )
     private String repassword;
 
