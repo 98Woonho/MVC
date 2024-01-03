@@ -1,0 +1,45 @@
+.board-body{
+    width : 1680px;
+    height : 1000px;
+    margin : 0 auto;
+    border : 1px solid lightgray;
+}
+.board-body>.items{
+    display:flex;
+    justify-content:center;
+    align-items:start;
+    flex-wrap : wrap;
+}
+.board-body>.items>.card {
+
+    border : 1px solid lightgrey;
+    margin : 10px;
+    text-align:center;
+    padding : 5px;
+    width : 400px;
+    height : 400px;
+    border : 1px solid gray;
+    object-fit:contain;
+}
+.board-body>.items>.card>*{
+    margin : 3px;
+}
+.board-body>.items>.card card-image{
+
+}
+.board-body>.items>.card card-image img{
+    width : 400px !important;
+    height : 300px !important;
+}
+.card-body .material-symbols-outlined{
+    font-size:0.8rem;
+}
+/*              */
+.paging-block{
+    margin : 10px auto;
+}
+.pagination{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
