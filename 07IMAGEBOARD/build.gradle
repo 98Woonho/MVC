@@ -71,6 +71,9 @@ dependencies {
 	//FILE UPLOAD
 	implementation 'commons-fileupload:commons-fileupload:1.5'
 
+	//THUMBNAILATOR
+	implementation 'net.coobird:thumbnailator:0.4.20'
+
 
 	//TEST
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

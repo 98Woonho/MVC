@@ -1,6 +1,9 @@
 package com.example.demo.domain.service;
 
 import com.example.demo.domain.dto.ImageBoardDto;
+import com.example.demo.domain.entity.ImageBoard;
+import com.example.demo.domain.entity.ImageBoardFileInfo;
+import com.example.demo.domain.repository.ImageBoardFileInfoRepository;
 import com.example.demo.domain.repository.ImageBoardRepository;
 import com.example.demo.properties.UploadInfoProperties;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +12,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.demo.properties.UploadInfoProperties.uploadPath;
 
 @Service
 @Slf4j
@@ -17,10 +28,30 @@ public class ImageBoardService {
     @Autowired
     private ImageBoardRepository imageBoardRepository;
 
+    @Autowired
+    private ImageBoardFileInfoRepository imageBoardFileInfoRepository;
+
     @Transactional(rollbackFor = Exception.class)
     public boolean addImageContents(ImageBoardDto dto) throws Exception {
+        //Dto -> Entity
+        ImageBoard imageBoard = ImageBoard.builder()
+                .seller(dto.getSeller())
+                .productname(dto.getProductname())
+                .brandname(dto.getBrandname())
+                .price(dto.getPrice())
+                .category(dto.getCategory())
+                .amount(dto.getAmount())
+                .size(dto.getSize())
+                .createAt(LocalDateTime.now())
+                .itemdetails(dto.getItemdetails())
+                .build();
+
+        imageBoardRepository.save(imageBoard);
+
+        List<String> files = new ArrayList<>();
+
         //저장 폴더 지정()
-        String uploadPath= UploadInfoProperties.uploadPath+ File.separator+dto.getSeller()+File.separator+dto.getCategory();
+        String uploadPath= UploadInfoProperties.uploadPath+ File.separator+dto.getSeller()+File.separator+dto.getCategory()+File.separator+imageBoard.getId();
         File dir = new File(uploadPath);
         if(!dir.exists())
             dir.mkdirs();
@@ -37,13 +68,26 @@ public class ImageBoardService {
 
             file.transferTo(fileobj);   //저장
 
+            // 썸네일 생성
+            File thumbnailFile = new File(dir, "s_"+file.getOriginalFilename());
+            BufferedImage bo_image = ImageIO.read(fileobj);
+            BufferedImage bt_image = new BufferedImage(250, 250, BufferedImage.TYPE_3BYTE_BGR);
+            Graphics2D graphic = bt_image.createGraphics();
+            graphic.drawImage(bo_image, 0, 0, 250, 250, null);
+            ImageIO.write(bt_image, "png", thumbnailFile);
+
+            // DB에 파일경로 저장
+            ImageBoardFileInfo imageBoardFileInfo = new ImageBoardFileInfo();
+            imageBoardFileInfo.setImageBoard(imageBoard);
+            imageBoardFileInfo.setDir(dir.getPath());
+            imageBoardFileInfo.setFilename(file.getOriginalFilename());
+            imageBoardFileInfoRepository.save(imageBoardFileInfo);
         }
+        return true;
+    }
 
-        //이미지파일 저장하기
-
-        //이미지Dto DB 저장
-        //1)dto->entity
-
-        return false;
+    @Transactional(rollbackFor = Exception.class)
+    public List<ImageBoard> getAllItems() throws Exception {
+        return imageBoardRepository.findAll();
     }
 }
