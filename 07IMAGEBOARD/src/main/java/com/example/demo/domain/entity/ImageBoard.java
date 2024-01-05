@@ -29,6 +29,4 @@ public class ImageBoard {
     private LocalDateTime createAt; // 등록 날짜
 
 //  @ElementCollection // id열과 Annotation된 열을 FK로 하는 열로 구성된 테이블이 생성 됨.
-
-    private List<String> files;
 }

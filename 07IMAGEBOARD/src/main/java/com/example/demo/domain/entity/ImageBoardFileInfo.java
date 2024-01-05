@@ -17,7 +17,7 @@ public class ImageBoardFileInfo {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "iid", foreignKey = @ForeignKey(name = "FK_imageFileInfo_imageBoard", foreignKeyDefinition = "FOREIGN KEY(iid) REFERENCES image_board(id) ON DELETE CASCADE ON UPDATE CASCADE")) // 외래키 지정
+    @JoinColumn(name = "imageboard_id", foreignKey = @ForeignKey(name = "FK_imageFileInfo_imageBoard", foreignKeyDefinition = "FOREIGN KEY(imageboard_id) REFERENCES image_board(id) ON DELETE CASCADE ON UPDATE CASCADE")) // 외래키 지정
     private ImageBoard imageBoard;
     private String dir;
     private String filename;
