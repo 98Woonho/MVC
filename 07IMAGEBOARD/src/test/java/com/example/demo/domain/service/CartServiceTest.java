@@ -27,7 +27,7 @@ class CartServiceTest {
 
     @Test
     public void t1() {
-        User user = userRepository.findById("user1").get();
+        User user = userRepository.findById("kakao_3220890258").get();
         ImageBoard imageBoard = imageBoardRepository.findById(1L).get();
         Cart cart = new Cart();
         cart.setUser(user);

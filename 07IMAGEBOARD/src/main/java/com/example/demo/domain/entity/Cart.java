@@ -26,5 +26,12 @@ public class Cart {
     @JoinColumn(name = "username", foreignKey = @ForeignKey(name = "FK_Cart_user_01", foreignKeyDefinition = "FOREIGN KEY(username) REFERENCES user(username) ON DELETE CASCADE ON UPDATE CASCADE")) // 외래키 지정
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "imageboard_file_id", foreignKey = @ForeignKey(name = "FK_Cart_imageBoard_file", foreignKeyDefinition = "FOREIGN KEY(imageboard_file_id) REFERENCES image_board_file_info(id) ON DELETE CASCADE ON UPDATE CASCADE")) // 외래키 지정
+    private ImageBoardFileInfo imageBoardFileInfo;
+
     private LocalDateTime regdate;
+
+    private int amount;
+    private String color;
 }

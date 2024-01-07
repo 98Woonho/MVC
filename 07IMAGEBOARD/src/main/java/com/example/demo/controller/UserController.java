@@ -5,6 +5,7 @@ import com.example.demo.config.auth.jwt.JwtTokenProvider;
 import com.example.demo.config.auth.jwt.TokenInfo;
 import com.example.demo.domain.dto.CertificationDto;
 import com.example.demo.domain.dto.UserDto;
+import com.example.demo.domain.entity.User;
 import com.example.demo.domain.service.UserService;
 import com.example.demo.properties.EmailAuthProperties;
 import jakarta.servlet.http.Cookie;
@@ -36,6 +37,8 @@ import java.util.Arrays;
 @Slf4j
 @RequestMapping("/user")
 public class UserController {
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     private UserService userService;
@@ -69,13 +72,13 @@ public class UserController {
 
     }
 
-
-
     @GetMapping("/join")
     public void join(){
         UserController.log.info("GET /join");
     }
+
     @PostMapping("/join")
+    // @Valid가 붙은 변수는 @NotBlank나 유효성 검사 Annotation을 자동으로 실행 및 수행해줌.
     public String join_post(@Valid UserDto dto, BindingResult bindingResult,Model model,HttpServletRequest request) throws Exception {
         UserController.log.info("POST /join...dto " + dto);
         //파라미터 받기
@@ -175,7 +178,7 @@ public class UserController {
 
     @GetMapping("/sendMail/{email}")
     @ResponseBody
-    public ResponseEntity<JSONObject> sendmailFunc(@PathVariable("email") String email){
+    public ResponseEntity<JSONObject> sendmailFunc(@PathVariable("email") String email) {
         UserController.log.info("GET /user/sendMail.." + email);
         //넣을 값 지정
         String code = EmailAuthProperties.planText;
@@ -190,27 +193,24 @@ public class UserController {
         javaMailSender.send(message);
 
 
-        return new ResponseEntity(new JSONObject().put("success", true) , HttpStatus.OK);
+        return new ResponseEntity(new JSONObject().put("success", true), HttpStatus.OK);
     }
 
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
     @GetMapping("/emailConfirm")
-    public @ResponseBody JSONObject emailConfirmFunc(String emailCode, String username , HttpServletResponse response ){
+    public @ResponseBody JSONObject emailConfirmFunc(String emailCode, String username , HttpServletResponse response ) {
         UserController.log.info("GET /user/emailConfirm... code : " + emailCode + " username " + username);
 
-        boolean isAuth= passwordEncoder.matches(EmailAuthProperties.planText,emailCode);
+        boolean isAuth = passwordEncoder.matches(EmailAuthProperties.planText, emailCode);
         JSONObject obj = new JSONObject();
 
-        if(isAuth) {
-            obj.put("success",true);
-            obj.put("message","이메일 인증을 성공하셨습니다.");
-            
+        if (isAuth) {
+            obj.put("success", true);
+            obj.put("message", "이메일 인증을 성공하셨습니다.");
+
             //JWT Token 에 이메일 인증완료 코드 JWT토큰으로 저장&전달
 //            PrincipalDetails principalDetails =  (PrincipalDetails)authentication.getPrincipal();
 
-            TokenInfo tokenInfo = jwtTokenProvider.generateToken("EmailAuth",username,true);
+            TokenInfo tokenInfo = jwtTokenProvider.generateToken("EmailAuth", username, true);
             // 쿠키 생성
             Cookie cookie = new Cookie("EmailAuth", tokenInfo.getAccessToken());
             cookie.setMaxAge(JwtProperties.EXPIRATION_TIME); // 쿠키의 만료시간 설정
@@ -220,15 +220,11 @@ public class UserController {
 
             return obj;
         }
-
-        obj.put("success",false);
-        obj.put("message","이메일 인증을 실패했습니다.");
+        obj.put("success", false);
+        obj.put("message", "이메일 인증을 실패했습니다.");
         return obj;
-
     }
 }
-
-
 
 class PhoneNumberEditor extends PropertyEditorSupport {
     @Override

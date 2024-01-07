@@ -46,8 +46,8 @@ public class UserService {
 
         //password vs repassword 일치여부
         if(!dto.getPassword().equals(dto.getRepassword()) ){
-                model.addAttribute("password","패스워드 입력이 상이합니다 다시 입력하세요");
-                return false;
+            model.addAttribute("password","패스워드 입력이 상이합니다 다시 입력하세요");
+            return false;
         }
 
         //동일 계정이 있는지 여부 확인
@@ -55,8 +55,6 @@ public class UserService {
             model.addAttribute("username","동일한 계정명이 존재합니다.");
             return false;
         }
-
-
 
         //이메일인증이 되었는지 확인(JWT EmailAuth쿠키 true확인)
         Cookie[] cookies =  request.getCookies();
@@ -68,8 +66,7 @@ public class UserService {
         // JWT토큰의 만료여부 확인
         //---
         if( !jwtTokenProvider.validateToken(jwtAccessToken)){
-
-            model.addAttribute("username","이메일 인증 유효시간을 초과했습니다");
+            model.addAttribute("username","이메일 인증을 진행해 주세요.");
             return false;
         }
         else{

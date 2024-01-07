@@ -24,5 +24,8 @@ public class HomeController {
         log.info("GET /templates...");
     }
 
-
+    @GetMapping("/user")
+    public void getUser(){
+        log.info("GET /user...");
+    }
 }
