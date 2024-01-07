@@ -1,7 +1,6 @@
 package com.example.demo.domain.entity;
 
 import com.example.demo.domain.dto.UserDto;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -46,5 +45,4 @@ public class User {
                 .build();
         return dto;
     }
-
 }

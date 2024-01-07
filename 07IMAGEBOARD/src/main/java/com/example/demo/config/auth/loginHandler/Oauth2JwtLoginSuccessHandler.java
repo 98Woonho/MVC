@@ -44,7 +44,6 @@ public class Oauth2JwtLoginSuccessHandler implements AuthenticationSuccessHandle
             System.out.println("[CustomLoginSuccessHandler] onAuthenticationSuccess() role : " + role);
             String role_str =  role.getAuthority();
 
-            // oAuth2 로그인 성공 후 페이지
             try {
                 if (role_str.equals("ROLE_USER")) {
                     response.sendRedirect("/user");

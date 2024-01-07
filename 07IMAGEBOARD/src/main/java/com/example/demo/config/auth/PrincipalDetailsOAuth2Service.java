@@ -5,7 +5,6 @@ import com.example.demo.config.auth.provider.GoogleUserInfo;
 import com.example.demo.config.auth.provider.KakaoUserInfo;
 import com.example.demo.config.auth.provider.NaverUserInfo;
 import com.example.demo.config.auth.provider.OAuth2UserInfo;
-import com.example.demo.controller.UserController;
 import com.example.demo.domain.dto.UserDto;
 import com.example.demo.domain.entity.User;
 import com.example.demo.domain.repository.UserRepository;
@@ -22,8 +21,6 @@ import java.util.Optional;
 
 @Service
 public class PrincipalDetailsOAuth2Service extends DefaultOAuth2UserService {
-    @Autowired
-    private UserController userController;
 
     @Autowired
     private UserRepository userRepository;
@@ -86,12 +83,17 @@ public class PrincipalDetailsOAuth2Service extends DefaultOAuth2UserService {
                     .provider(oAuth2UserInfo.getProvider())
                     .providerId(oAuth2UserInfo.getProviderId())
                     .build();
+
             userRepository.save(user);
             dto = User.entityToDto(user);
+            System.out.println("[PrincipalDetailsOAuth2Service] loadUser() "+oAuth2UserInfo.getProvider()+" 최초 로그인!");
         }else{
             User user = optional.get();
             dto = User.entityToDto(user);
+            System.out.println("[PrincipalDetailsOAuth2Service] loadUser() "+oAuth2UserInfo.getProvider()+" 기존계정 로그인!");
+
         }
+        
         //PrincipalDetails생성
         PrincipalDetails principalDetails = new PrincipalDetails();
         principalDetails.setAttributes(oAuth2UserInfo.getAttributes());
@@ -99,4 +101,6 @@ public class PrincipalDetailsOAuth2Service extends DefaultOAuth2UserService {
         principalDetails.setUserDto(dto);
         return principalDetails;
     }
+
+
 }
