@@ -24,6 +24,7 @@
     </header>
 
     <main class="container-xxl">
+
         <section class="cart">
             <!-- aside -->
             <!-- body -->
@@ -35,55 +36,64 @@
                     </div>
 
                 </div>
-                <!--item-->
+
                 <div class="item_body">
                     <div class="image_board_block">
-                        <div> <input type="checkbox" class="item_checkbox" /> </div>
-                        <div><img th:src="@{${cart.imageBoardFileInfo.dir} + ${cart.imageBoardFileInfo.filename}}" ></div>
+                        <div>
+                            <input type="checkbox"  class="item_checkbox" th:data-cartid="${cart.cart_id}" />
+                        </div>
+                        <div><img th:src="@{${cart.imageBoardFileInfo.dir}+${cart.imageBoardFileInfo.filename}}" ></div>
                         <div>
                             <div style="font-weight:800;font-size:0.8rem;" th:text="${cart.imageBoard.productname}"></div>
-                            <div><span style="font-weight:600;font-size:0.7rem;" th:text="${cart.imageBoard.price}"></span> 원</div>
-<!--                            <div style="color:gray;font-size:0.6rem;">미소안경 | 스마트스토어</div>-->
+                            <div>
+                                <span class="price" style="font-weight:600;font-size:0.7rem;" th:text="${cart.imageBoard.price}"></span> 원</div>
+                            <!--                            <div style="color:gray;font-size:0.6rem;">미소안경 | 스마트스토어</div>-->
                         </div>
                     </div>
                     <div class="order_block">
                         <div>
+                            <div><span  >amount :</span><span th:text="${cart.amount}" class="amount"></span></div>
                             <div><span>color :</span><span th:text="${cart.color}"></span></div>
-                            <div><span>amount :</span><span th:text="${cart.amount}"></span></div>
                         </div>
                     </div>
                     <div class="price_block">
                         <div>
-
-                            <span style="font-size:1.2rem;font-weight:800" th:text="${cart.amount} * ${cart.imageBoard.price}"></span>원
+                            <span   style="font-size:1.2rem;font-weight:800" th:text="${cart.amount} * ${cart.imageBoard.price}">0</span> 원
                         </div>
                     </div>
                     <div class="delivery_block">
                         <div>
-                            <span>배송료 : </span><span style="font-size:1rem;font-weight:800;"> 3,000</span>원
+                            <span>배송료 : </span><span class="delevery_price" style="font-size:1rem;font-weight:800;"> 3,000</span>원
                         </div>
                     </div>
                     <div class="delete_block">
-                        <span class="material-symbols-outlined">close</span>
+                        <a href="javascript:void(0)" class="cart_delete_btn" th:data-id="${cart.cart_id}">
+                            <span class="material-symbols-outlined">close</span>
+                        </a>
                     </div>
                 </div>
                 <!--card item-->
             </div>
 
 
+
+
             <div class="items_footer_block">
                 <div class="calc_block">
-                    <div>전체상품금액<br><span style="font-weight:800;">35,800</span></div>
-                    <div>총배송비<br><span style="font-weight:800;">3000</span></div>
+                    <div>전체상품금액<br>
+                        <span class="total_price" ></span>
+                    </div>
+                    <div>총배송비<br><span class="delivery_price" style="font-weight:800;">3000</span></div>
                     <div>즉시할인예상금액<br><span style="font-weight:800;color:red;">0</span></div>
                 </div>
                 <div class="total_price_block">
-                    <div>주문금액 <span  style="font-weight:800;color:green">38,000</span> 원</div>
+                    <div>총 주문금액 <span  class="total_delivery_price" style="font-weight:800;color:green"></span> 원</div>
                 </div>
                 <div>
-                    <button onclick="" class="btn btn-success">미소안경 1건 주문하기</button>
+                    <button class="btn btn-success req_pay_btn">주문하기</button>
                 </div>
             </div>
+
         </section>
 
 
@@ -101,6 +111,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- common.js   -->
 <script src="/js/common.js"></script>
+<script src="/js/cart/read.js"></script>
 
 </body>
 </html>

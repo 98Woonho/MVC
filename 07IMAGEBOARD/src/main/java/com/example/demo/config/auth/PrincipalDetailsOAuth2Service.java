@@ -83,7 +83,6 @@ public class PrincipalDetailsOAuth2Service extends DefaultOAuth2UserService {
                     .provider(oAuth2UserInfo.getProvider())
                     .providerId(oAuth2UserInfo.getProviderId())
                     .build();
-
             userRepository.save(user);
             dto = User.entityToDto(user);
             System.out.println("[PrincipalDetailsOAuth2Service] loadUser() "+oAuth2UserInfo.getProvider()+" 최초 로그인!");

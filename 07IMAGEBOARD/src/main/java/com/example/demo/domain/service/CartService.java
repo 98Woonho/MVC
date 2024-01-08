@@ -9,6 +9,7 @@ import com.example.demo.domain.repository.CartRepository;
 import com.example.demo.domain.repository.ImageBoardFileInfoRepository;
 import com.example.demo.domain.repository.ImageBoardRepository;
 import com.example.demo.domain.repository.UserRepository;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -64,5 +66,20 @@ public class CartService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return cartRepository.findByUserUsername(username);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public List<Cart> getMyCartItems(Long[] id_arr) {
+        List<Cart> list = new ArrayList<>();
+        for(Long cart_id : id_arr) {
+            list.add(cartRepository.findById(cart_id).get());
+        }
+        return list;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteCart(Long cartId) throws Exception {
+        cartRepository.deleteById(cartId);
+        return true;
     }
 }

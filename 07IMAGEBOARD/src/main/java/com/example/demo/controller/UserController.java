@@ -66,7 +66,6 @@ public class UserController {
         UserController.log.info("credentials : " + authentication.getCredentials());
 
         model.addAttribute("authentication",authentication);
-
     }
 
     @GetMapping("/join")
@@ -110,7 +109,7 @@ public class UserController {
             boolean isExisted = Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals("importAuth")).findFirst()
                     .isEmpty();
             if (!isExisted) {
-                response.sendRedirect("/user/join");
+                response.sendRedirect("/user/join"); // return "user/join"을 하면 user/join의 페이지만 나오고 주소창은 user/certification으로 고정되어 있어서 sendRedirect 해야함.
                 return null;
             }
         }
@@ -130,7 +129,6 @@ public class UserController {
         obj.put("success",true);
 
         return  new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
-
     }
 
     @GetMapping("/findId")

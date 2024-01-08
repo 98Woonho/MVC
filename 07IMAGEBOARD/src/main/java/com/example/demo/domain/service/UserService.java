@@ -87,17 +87,17 @@ public class UserService {
 
         }
 
-
-
-
-
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         //Dto->Entity
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setPassword(dto.getPassword());
-        user.setRole(dto.getRole());
         user.setRole("ROLE_USER");
+        user.setZipcode(dto.getZipcode());
+        user.setAddr1(dto.getAddr1());
+        user.setAddr2(dto.getAddr2());
+        user.setNickname(dto.getNickname());
+        user.setPassword(dto.getPassword());
 
         //Db Saved...
         userRepository.save(user);
